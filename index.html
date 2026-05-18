@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DAMIANO AI - RED OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="container">
+        <header class="header">
+            <div class="damiano-core"><div class="ring"></div><div class="dot"></div></div>
+            <div class="header-text">
+                <h1>DAMIANO</h1>
+                <p>DAMIANO INDUSTRIES • RED PROTOCOL v12.0</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="input-section">
+                <div class="input-row">
+                    <span class="prompt">CMD_></span>
+                    <input type="text" id="command-input" placeholder="Attesa comando..." autocomplete="off">
+                </div>
+                <div class="actions">
+                    <button id="execute-btn" class="btn primary">EXECUTE</button>
+                    <button id="help-btn" class="btn">HELP</button>
+                    <button id="clear-btn" class="btn">CLEAR</button>
+                </div>
+            </section>
+
+            <div id="output-area" class="output-area">
+                <div class="output-line success">SISTEMA DAMIANO V12 ATTIVO. Digita 'help' per la lista.</div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <span>SISTEMA: STABILE</span>
+            <span>OS: DAMIANO_RED_V12</span>
+            <span>© DAMIANO INDUSTRIES</span>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
