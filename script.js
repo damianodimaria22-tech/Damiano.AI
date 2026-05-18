@@ -1,5 +1,7 @@
-class DamianoAssistant {
-    constructor() {
+class DamianoAssistant
+{
+    constructor()
+    {
         this.input = document.getElementById("command-input");
         this.output = document.getElementById("output-area");
         this.map = null;
@@ -14,26 +16,48 @@ class DamianoAssistant {
         this.setupListeners();
     }
 
-    setupListeners() {
-        this.input.addEventListener("keydown", (e) => { if(e.key === "Enter") this.handleCommand(); });
-        document.getElementById("execute-btn").addEventListener("click", () => this.handleCommand());
-        document.getElementById("clear-btn").addEventListener("click", () => this.clearOutput());
-        document.getElementById("help-btn").addEventListener("click", () => {
+    setupListeners()
+    {
+        this.input.addEventListener("keydown", (e) => 
+        { 
+            if(e.key === "Enter") 
+            {
+                this.handleCommand(); 
+            }
+        });
+
+        document.getElementById("execute-btn").addEventListener("click", () => 
+        { 
+            this.handleCommand(); 
+        });
+
+        document.getElementById("clear-btn").addEventListener("click", () => 
+        { 
+            this.clearOutput(); 
+        });
+
+        document.getElementById("help-btn").addEventListener("click", () => 
+        {
             this.input.value = "help";
             this.handleCommand();
         });
     }
 
-    handleCommand() {
+    handleCommand()
+    {
         const raw = this.input.value.trim();
-        if(!raw) return;
+        if(!raw) 
+        {
+            return;
+        }
         this.input.value = "";
         
         this.print(`➜ CMD_INPUT: ${raw}`, "command");
         const args = raw.toLowerCase().split(" ");
         const cmd = args[0];
 
-        switch(cmd) {
+        switch(cmd)
+        {
             case "nota":
                 this.print(`APPUNTO SALVATO: ${raw.substring(5)}`, "nota");
                 break;
@@ -51,7 +75,8 @@ class DamianoAssistant {
                 window.open(`https://it.wikipedia.org/wiki/${encodeURIComponent(raw.substring(10))}`, "_blank");
                 this.print("Ricerca Wikipedia avviata.", "success");
                 break;
-            case "curiosità": case "curiosita":
+            case "curiosità": 
+            case "curiosita":
                 this.print(`CURIOSITÀ: ${this.facts[Math.floor(Math.random() * this.facts.length)]}`, "success");
                 break;
             case "traduce":
@@ -78,7 +103,10 @@ class DamianoAssistant {
                 break;
             case "apri":
                 let url = raw.substring(5).trim();
-                if (!url.startsWith("http")) url = "https://" + url;
+                if (!url.startsWith("http")) 
+                {
+                    url = "https://" + url;
+                }
                 window.open(url, "_blank");
                 break;
             case "calcola":
@@ -92,7 +120,8 @@ class DamianoAssistant {
         }
     }
 
-    print(msg, type = "") {
+    print(msg, type = "")
+    {
         const div = document.createElement("div");
         div.className = `output-line ${type}`;
         div.textContent = msg;
@@ -100,23 +129,37 @@ class DamianoAssistant {
         this.output.scrollTop = this.output.scrollHeight;
     }
 
-    clearOutput() {
+    clearOutput()
+    {
         this.output.innerHTML = "";
         this.print("LOG CONSOLE RESETTATO.", "info");
     }
 
-    calculate(exp) {
-        try { this.print(`RISULTATO: ${eval(exp.replace(/[^-()\d/*+.]/g, ''))}`, "success"); }
-        catch { this.print("Errore matematico.", "error"); }
+    calculate(exp)
+    {
+        try 
+        { 
+            this.print(`RISULTATO: ${eval(exp.replace(/[^-()\d/*+.]/g, ''))}`, "success"); 
+        }
+        catch (e)
+        { 
+            this.print("Errore matematico.", "error"); 
+        }
     }
 
-    async showMap(loc) {
+    async showMap(loc)
+    {
         const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${loc}`);
         const data = await res.json();
-        if(data[0]) {
-            const mapDiv = document.createElement("div"); mapDiv.id = "map";
+        if(data[0])
+        {
+            const mapDiv = document.createElement("div"); 
+            mapDiv.id = "map";
             this.output.appendChild(mapDiv);
-            if(this.map) this.map.remove();
+            if(this.map) 
+            {
+                this.map.remove();
+            }
             this.map = L.map('map').setView([data[0].lat, data[0].lon], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             L.marker([data[0].lat, data[0].lon]).addTo(this.map);
@@ -124,31 +167,47 @@ class DamianoAssistant {
         }
     }
 
-    getWeather() {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
+    getWeather()
+    {
+        navigator.geolocation.getCurrentPosition(async (pos) => 
+        {
             const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
             const d = await res.json();
             this.print(`METEO ATTUALE: ${d.current_weather.temperature}°C`, "success");
         });
     }
 
-    showHelp() {
+    showHelp()
+    {
         this.print("--- PROTOCOLLI SISTEMA DAMIANO V12 ---", "success");
-        this.print("> nota [testo] (Appunto rapido)", "help-item");
-        this.print("> notizie (Ultime news mondiali)", "help-item");
-        this.print("> wikipedia [testo] (Cerca enciclopedia)", "help-item");
-        this.print("> curiosità (Fatti database)", "help-item");
-        this.print("> traduce [testo] (Inglese)", "help-item");
-        this.print("> naviga [luogo] (Ologramma mappa)", "help-item");
-        this.print("> meteo (Dati locali)", "help-item");
-        this.print("> ora (Orario di sistema)", "help-item");
-        this.print("> calcola [operazione]", "help-item");
-        this.print("> google [ricerca]", "help-item");
-        this.print("> youtube [video]", "help-item");
-        this.print("> amazon [shopping]", "help-item");
-        this.print("> apri [sito.it]", "help-item");
-        this.print("> speedtest (Analisi rete)", "help-item");
-        this.print("> clear (Pulisce console)", "help-item");
+        
+        const commands = [
+            { c: "> nota [testo]", d: "(Appunto rapido)" },
+            { c: "> notizie", d: "(Ultime news mondiali)" },
+            { c: "> wikipedia [testo]", d: "(Cerca enciclopedia)" },
+            { c: "> curiosità", d: "(Fatti database)" },
+            { c: "> traduce [testo]", d: "(Inglese)" },
+            { c: "> naviga [luogo]", d: "(Ologramma mappa)" },
+            { c: "> meteo", d: "(Dati locali)" },
+            { c: "> ora", d: "(Orario di sistema)" },
+            { c: "> calcola [operazione]", d: "(Esegui calcolo)" },
+            { c: "> google [ricerca]", d: "(Cerca sul web)" },
+            { c: "> youtube [video]", d: "(Cerca video)" },
+            { c: "> amazon [shopping]", d: "(Cerca prodotti)" },
+            { c: "> apri [sito.it]", d: "(Apertura diretta)" },
+            { c: "> speedtest", d: "(Analisi rete)" },
+            { c: "> clear", d: "(Pulisce console)" }
+        ];
+
+        commands.forEach(cmd => 
+        {
+            this.print(cmd.c, "help-item");
+            this.print(cmd.d, "help-desc");
+        });
     }
 }
-window.onload = () => new DamianoAssistant();
+
+window.onload = () => 
+{
+    new DamianoAssistant();
+};
