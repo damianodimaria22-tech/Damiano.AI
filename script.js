@@ -101,14 +101,6 @@ class DamianoAssistant
             case "amazon":
                 window.open(`https://www.amazon.it/s?k=${encodeURIComponent(raw.substring(7))}`, "_blank");
                 break;
-            case "apri":
-                let url = raw.substring(5).trim();
-                if (!url.startsWith("http")) 
-                {
-                    url = "https://" + url;
-                }
-                window.open(url, "_blank");
-                break;
             case "calcola":
                 this.calculate(raw.substring(8));
                 break;
@@ -194,7 +186,6 @@ class DamianoAssistant
             { c: "> google [ricerca]", d: "(Cerca sul web)" },
             { c: "> youtube [video]", d: "(Cerca video)" },
             { c: "> amazon [shopping]", d: "(Cerca prodotti)" },
-            { c: "> apri [sito.it]", d: "(Apertura diretta)" },
             { c: "> speedtest", d: "(Analisi rete)" },
             { c: "> clear", d: "(Pulisce console)" }
         ];
